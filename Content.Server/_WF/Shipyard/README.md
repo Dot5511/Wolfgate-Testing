@@ -32,6 +32,7 @@ share from its slot, or from the counter of a trader hosting it (`ShipyardHostCa
 - [`Content.Server/_WF/Shipyard/DeviceNetworkSystem.Wolfgate.cs`](DeviceNetworkSystem.Wolfgate.cs)
 - [`Content.Server/_WF/Shipyard/PowerChargeSystem.Wolfgate.cs`](PowerChargeSystem.Wolfgate.cs)
 - [`Content.Server/_WF/Shipyard/ShipyardSystem.WolfgateDeed.cs`](ShipyardSystem.WolfgateDeed.cs)
+- [`Content.Server/_WF/Shipyard/ShipyardSystem.WolfgateOwnership.cs`](ShipyardSystem.WolfgateOwnership.cs)
 - [`Content.Server/_WF/Shipyard/ShipyardSystem.WolfgateTrader.cs`](ShipyardSystem.WolfgateTrader.cs)
 - [`Content.Server/_WF/Shipyard/ShipyardSystem.WolfgateUnsavable.cs`](ShipyardSystem.WolfgateUnsavable.cs)
 - [`Content.Server/_WF/Shipyard/ShipyardWolfgateEvents.cs`](ShipyardWolfgateEvents.cs)
@@ -57,6 +58,7 @@ share from its slot, or from the counter of a trader hosting it (`ShipyardHostCa
 - [`Resources/Prototypes/_WF/Shipyard/bucket.yml`](../../../Resources/Prototypes/_WF/Shipyard/bucket.yml)
 - [`Resources/Prototypes/_WF/Shipyard/carabela.yml`](../../../Resources/Prototypes/_WF/Shipyard/carabela.yml)
 - [`Resources/Prototypes/_WF/Shipyard/Carrier/vox_skipjack.yml`](../../../Resources/Prototypes/_WF/Shipyard/Carrier/vox_skipjack.yml)
+- [`Resources/Prototypes/_WF/Shipyard/dread.yml`](../../../Resources/Prototypes/_WF/Shipyard/dread.yml)
 - [`Resources/Prototypes/_WF/Shipyard/dredger.yml`](../../../Resources/Prototypes/_WF/Shipyard/dredger.yml)
 - [`Resources/Prototypes/_WF/Shipyard/Entities/Objects/Devices/ship_vouchers.yml`](../../../Resources/Prototypes/_WF/Shipyard/Entities/Objects/Devices/ship_vouchers.yml)
 - [`Resources/Prototypes/_WF/Shipyard/foxtrot_ii.yml`](../../../Resources/Prototypes/_WF/Shipyard/foxtrot_ii.yml)
@@ -64,6 +66,7 @@ share from its slot, or from the counter of a trader hosting it (`ShipyardHostCa
 - [`Resources/Prototypes/_WF/Shipyard/hermes.yml`](../../../Resources/Prototypes/_WF/Shipyard/hermes.yml)
 - [`Resources/Prototypes/_WF/Shipyard/lathe_recipes.yml`](../../../Resources/Prototypes/_WF/Shipyard/lathe_recipes.yml)
 - [`Resources/Prototypes/_WF/Shipyard/reach.yml`](../../../Resources/Prototypes/_WF/Shipyard/reach.yml)
+- [`Resources/Prototypes/_WF/Shipyard/Reaver/minerva.yml`](../../../Resources/Prototypes/_WF/Shipyard/Reaver/minerva.yml)
 - [`Resources/Prototypes/_WF/Shipyard/scarab.yml`](../../../Resources/Prototypes/_WF/Shipyard/scarab.yml)
 - [`Resources/Prototypes/_WF/Shipyard/solarsail.yml`](../../../Resources/Prototypes/_WF/Shipyard/solarsail.yml)
 - [`Resources/Prototypes/_WF/Shipyard/srashakri.yml`](../../../Resources/Prototypes/_WF/Shipyard/srashakri.yml)
@@ -87,11 +90,13 @@ share from its slot, or from the counter of a trader hosting it (`ShipyardHostCa
 - [`Resources/SharedMaps/_WF/Shipyard/Shuttles/bucket.yml`](../../../Resources/SharedMaps/_WF/Shipyard/Shuttles/bucket.yml)
 - [`Resources/SharedMaps/_WF/Shipyard/Shuttles/carabela.yml`](../../../Resources/SharedMaps/_WF/Shipyard/Shuttles/carabela.yml)
 - [`Resources/SharedMaps/_WF/Shipyard/Shuttles/Carrier/vox_skipjack.yml`](../../../Resources/SharedMaps/_WF/Shipyard/Shuttles/Carrier/vox_skipjack.yml)
+- [`Resources/SharedMaps/_WF/Shipyard/Shuttles/dread.yml`](../../../Resources/SharedMaps/_WF/Shipyard/Shuttles/dread.yml)
 - [`Resources/SharedMaps/_WF/Shipyard/Shuttles/dredger.yml`](../../../Resources/SharedMaps/_WF/Shipyard/Shuttles/dredger.yml)
 - [`Resources/SharedMaps/_WF/Shipyard/Shuttles/foxtrot_ii.yml`](../../../Resources/SharedMaps/_WF/Shipyard/Shuttles/foxtrot_ii.yml)
 - [`Resources/SharedMaps/_WF/Shipyard/Shuttles/hammerhead.yml`](../../../Resources/SharedMaps/_WF/Shipyard/Shuttles/hammerhead.yml)
 - [`Resources/SharedMaps/_WF/Shipyard/Shuttles/hermes.yml`](../../../Resources/SharedMaps/_WF/Shipyard/Shuttles/hermes.yml)
 - [`Resources/SharedMaps/_WF/Shipyard/Shuttles/reach.yml`](../../../Resources/SharedMaps/_WF/Shipyard/Shuttles/reach.yml)
+- [`Resources/SharedMaps/_WF/Shipyard/Shuttles/Reaver/minerva.yml`](../../../Resources/SharedMaps/_WF/Shipyard/Shuttles/Reaver/minerva.yml)
 - [`Resources/SharedMaps/_WF/Shipyard/Shuttles/scarab.yml`](../../../Resources/SharedMaps/_WF/Shipyard/Shuttles/scarab.yml)
 - [`Resources/SharedMaps/_WF/Shipyard/Shuttles/solarsail.yml`](../../../Resources/SharedMaps/_WF/Shipyard/Shuttles/solarsail.yml)
 - [`Resources/SharedMaps/_WF/Shipyard/Shuttles/srashakri.yml`](../../../Resources/SharedMaps/_WF/Shipyard/Shuttles/srashakri.yml)
@@ -121,7 +126,10 @@ share from its slot, or from the counter of a trader hosting it (`ShipyardHostCa
 - [`Resources/Prototypes/_Mono/Recipes/Lathes/Packs/Factions/phaethon_dynasty.yml`](../../../Resources/Prototypes/_Mono/Recipes/Lathes/Packs/Factions/phaethon_dynasty.yml): Foxtrot-II voucher
 - [`Resources/Prototypes/_Mono/Roles/Jobs/Medical/medic.yml`](../../../Resources/Prototypes/_Mono/Roles/Jobs/Medical/medic.yml): free Triage or Stubby
 - [`Resources/Prototypes/_Mono/Roles/Jobs/ViperGroup/commander.yml`](../../../Resources/Prototypes/_Mono/Roles/Jobs/ViperGroup/commander.yml): VG commanders start with a voucher for their Wolf
-- [`Resources/Prototypes/_NF/Entities/Objects/Devices/Misc/ship_vouchers.yml`](../../../Resources/Prototypes/_NF/Entities/Objects/Devices/Misc/ship_vouchers.yml): Judges can redeem Roswell with the standard station guard voucher
+- [`Resources/Prototypes/_NF/Entities/Objects/Devices/Misc/ship_vouchers.yml`](../../../Resources/Prototypes/_NF/Entities/Objects/Devices/Misc/ship_vouchers.yml)
+  - Mono vouchers only list their vessels, access alone offers nothing
+  - the mail ship, not the janitor's
+  - Judges can redeem Roswell with the standard station guard voucher
 - [`Resources/Prototypes/_NF/Entities/Structures/Machines/Computers/computers_shipyard.yml`](../../../Resources/Prototypes/_NF/Entities/Structures/Machines/Computers/computers_shipyard.yml): cash in a destroyed console drops instead of being deleted
 - [`Resources/SharedMaps/_Mono/Shuttles/Civilian/guppy.yml`](../../../Resources/SharedMaps/_Mono/Shuttles/Civilian/guppy.yml): Saved with its air filled in; the starter ship spawned as vacuum.
 

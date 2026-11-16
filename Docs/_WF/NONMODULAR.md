@@ -56,7 +56,9 @@ Standalone edits outside `_WF` that serve no module: files with an untagged `WOL
 - [`Content.Client/Lobby/UI/Roles/TraitPreferenceSelector.xaml.cs`](../../Content.Client/Lobby/UI/Roles/TraitPreferenceSelector.xaml.cs): restore the licence header removed by Kill Spdx
 - [`Content.Client/MachineLinking/UI/SignalTimerBoundUserInterface.cs`](../../Content.Client/MachineLinking/UI/SignalTimerBoundUserInterface.cs): restore the licence header removed by Kill Spdx
 - [`Content.Client/MachineLinking/UI/SignalTimerWindow.xaml.cs`](../../Content.Client/MachineLinking/UI/SignalTimerWindow.xaml.cs): restore the licence header removed by Kill Spdx
+- [`Content.Client/NightVision/NightVisionSystem.cs`](../../Content.Client/NightVision/NightVisionSystem.cs): relayed gear sits on the item, so refresh the local wearer instead
 - [`Content.Client/Parallax/ParallaxSystem.cs`](../../Content.Client/Parallax/ParallaxSystem.cs): a map without a Parallax component falls back to this name, so load it or space is black
+- [`Content.Client/Polymorph/Systems/ChameleonProjectorSystem.cs`](../../Content.Client/Polymorph/Systems/ChameleonProjectorSystem.cs): the source's hover outline came along as a post-shader with no prototype, which threw on init
 - [`Content.Client/Projectiles/ProjectileSystem.cs`](../../Content.Client/Projectiles/ProjectileSystem.cs): restore the licence header removed by Kill Spdx
 - [`Content.Client/Shuttles/UI/BaseShuttleControl.xaml.cs`](../../Content.Client/Shuttles/UI/BaseShuttleControl.xaml.cs)
   - v291 Box2 asserts on inverted corners in debug builds; order them
@@ -125,6 +127,7 @@ Standalone edits outside `_WF` that serve no module: files with an untagged `WOL
   - an instant do-after has already ended, so nothing would ever delete the effect
 - [`Content.Server/_Mono/AmmoLoader/AmmoLoaderSystem.cs`](../../Content.Server/_Mono/AmmoLoader/AmmoLoaderSystem.cs): an infinite magazine reports no rounds, which hid it and blocked unloading
 - [`Content.Server/_Mono/Botany/PlantAnalyzer/PlantAnalyzerSystem.cs`](../../Content.Server/_Mono/Botany/PlantAnalyzer/PlantAnalyzerSystem.cs): was 0.01, so the slightest drift silently cancelled the scan
+- [`Content.Server/_Mono/Detection/ThermalSignatureSystem.cs`](../../Content.Server/_Mono/Detection/ThermalSignatureSystem.cs): one bad source must not poison a grid's heat for good
 - [`Content.Server/_Mono/FireControl/FireControlRotateComponent.cs`](../../Content.Server/_Mono/FireControl/FireControlRotateComponent.cs): restore the licence header removed by Kill Spdx
 - [`Content.Server/_Mono/FireControl/FireControlSystem.cs`](../../Content.Server/_Mono/FireControl/FireControlSystem.cs): restore the licence header removed by Kill Spdx
 - [`Content.Server/_Mono/Projectiles/TargetSeeking/Events.cs`](../../Content.Server/_Mono/Projectiles/TargetSeeking/Events.cs): restore the licence header removed by Kill Spdx
@@ -205,6 +208,12 @@ Standalone edits outside `_WF` that serve no module: files with an untagged `WOL
 - [`Content.Server/Mind/MindSystem.cs`](../../Content.Server/Mind/MindSystem.cs): a session whose data is already gone (a client torn down mid-delete) failed the asserts with a KeyNotFoundException
 - [`Content.Server/Mining/MiningSystem.cs`](../../Content.Server/Mining/MiningSystem.cs): restore the licence header removed by Kill Spdx
 - [`Content.Server/Movement/Systems/LagCompensationSystem.cs`](../../Content.Server/Movement/Systems/LagCompensationSystem.cs): restore the licence header removed by Kill Spdx
+- [`Content.Server/NPC/HTN/PrimitiveTasks/Operators/MoveToOperator.cs`](../../Content.Server/NPC/HTN/PrimitiveTasks/Operators/MoveToOperator.cs)
+  - set when Startup found no target
+  - a target dropped since planning, or on a map since deleted, threw and stopped every NPC that tick
+  - the target went before the move started
+  - a lost target is forgotten with the move
+- [`Content.Server/NPC/Systems/NPCSteeringSystem.Context.cs`](../../Content.Server/NPC/Systems/NPCSteeringSystem.Context.cs): a path over a grid deleted since it was found threw and put the NPC to sleep; repath instead
 - [`Content.Server/Nutrition/EntitySystems/DrinkSystem.cs`](../../Content.Server/Nutrition/EntitySystems/DrinkSystem.cs): restore the licence header removed by Kill Spdx
 - [`Content.Server/Nutrition/EntitySystems/FoodSystem.cs`](../../Content.Server/Nutrition/EntitySystems/FoodSystem.cs): restore the licence header removed by Kill Spdx
 - [`Content.Server/Polymorph/Systems/PolymorphSystem.cs`](../../Content.Server/Polymorph/Systems/PolymorphSystem.cs): skip the copy when either body isn't humanoid, as when an artifact turns a monkey into a lizard
@@ -242,6 +251,7 @@ Standalone edits outside `_WF` that serve no module: files with an untagged `WOL
   - closed UIs skip updates, so refresh on open
   - refresh the state on open; the update loop skips closed UIs
   - skip closed UIs; each update re-sent the whole UI component, a large radar state on admin ghosts
+- [`Content.Server/Spawners/Components/SpawnOnDespawnComponent.cs`](../../Content.Server/Spawners/Components/SpawnOnDespawnComponent.cs): default to one spawn so prototypes without a count do not duplicate
 - [`Content.Server/Spawners/EntitySystems/SpawnPointSystem.cs`](../../Content.Server/Spawners/EntitySystems/SpawnPointSystem.cs)
   - fallback ordering
   - prefer spawners that aren't another job's, e.g. not the godfather's office for a fugitive
@@ -259,7 +269,6 @@ Standalone edits outside `_WF` that serve no module: files with an untagged `WOL
 - [`Content.Shared/_FarHorizons/Power/Generation/FissionGenerator/ReactorPartComponent.cs`](../../Content.Shared/_FarHorizons/Power/Generation/FissionGenerator/ReactorPartComponent.cs): relabelled MIT as in HardLight b602e8d485
 - [`Content.Shared/_FarHorizons/Power/Generation/FissionGenerator/TurbineComponent.cs`](../../Content.Shared/_FarHorizons/Power/Generation/FissionGenerator/TurbineComponent.cs): relabelled MIT as in HardLight b602e8d485
 - [`Content.Shared/_FinalHorizon/Guns/AlternateGun/AlternateGunSystem.cs`](../../Content.Shared/_FinalHorizon/Guns/AlternateGun/AlternateGunSystem.cs): the client picks the gun to fire from this
-- [`Content.Shared/_Goobstation/Clothing/Systems/SharedSealableClothingSystem.cs`](../../Content.Shared/_Goobstation/Clothing/Systems/SharedSealableClothingSystem.cs): a crit or dead wearer can't work their own seals
 - [`Content.Shared/_Goobstation/Construction/ConstructedEvent.cs`](../../Content.Shared/_Goobstation/Construction/ConstructedEvent.cs): restore the licence header removed by Kill Spdx
 - [`Content.Shared/_Goobstation/DoAfter/DoAfterEndedEvent.cs`](../../Content.Shared/_Goobstation/DoAfter/DoAfterEndedEvent.cs): restore the licence header removed by Kill Spdx
 - [`Content.Shared/_Goobstation/Factory/AutomatedComponent.cs`](../../Content.Shared/_Goobstation/Factory/AutomatedComponent.cs): restore the licence header removed by Kill Spdx
@@ -297,6 +306,7 @@ Standalone edits outside `_WF` that serve no module: files with an untagged `WOL
   - document the armed action's flat damage bonus
   - flat bonus added after melee modifiers, about 100 with a bare fist
 - [`Content.Shared/_Mono/BlackFlash/BlackFlashSystem.cs`](../../Content.Shared/_Mono/BlackFlash/BlackFlashSystem.cs): apply configured flat damage after melee modifiers
+- [`Content.Shared/_Mono/Detection/DetectionSystem.cs`](../../Content.Shared/_Mono/Detection/DetectionSystem.cs): a NaN or infinite heat made a grid undetectable, so radar dropped its hull
 - [`Content.Shared/_Mono/Economy/SharedCreditReceiverSystem.cs`](../../Content.Shared/_Mono/Economy/SharedCreditReceiverSystem.cs): _log was never assigned, so every log line in TryCashPayment threw a NullReferenceException
 - [`Content.Shared/_Mono/ShipGuns/ShipGunClassComponent.cs`](../../Content.Shared/_Mono/ShipGuns/ShipGunClassComponent.cs): restore the licence header removed by Kill Spdx
 - [`Content.Shared/_Mono/Traits/Physical/BionicLegsComponent.cs`](../../Content.Shared/_Mono/Traits/Physical/BionicLegsComponent.cs): restore the licence header removed by Kill Spdx
@@ -323,7 +333,6 @@ Standalone edits outside `_WF` that serve no module: files with an untagged `WOL
 - [`Content.Shared/_RMC14/Weapons/Ranged/Prediction/PredictedProjectileHitEvent.cs`](../../Content.Shared/_RMC14/Weapons/Ranged/Prediction/PredictedProjectileHitEvent.cs): restore the licence header removed by Kill Spdx
 - [`Content.Shared/_RMC14/Weapons/Ranged/Prediction/PredictedProjectileServerComponent.cs`](../../Content.Shared/_RMC14/Weapons/Ranged/Prediction/PredictedProjectileServerComponent.cs): restore the licence header removed by Kill Spdx
 - [`Content.Shared/_RMC14/Weapons/Ranged/Prediction/SharedGunPredictionSystem.cs`](../../Content.Shared/_RMC14/Weapons/Ranged/Prediction/SharedGunPredictionSystem.cs): restore the licence header removed by Kill Spdx
-- [`Content.Shared/Access/Components/IdCardConsoleComponent.cs`](../../Content.Shared/Access/Components/IdCardConsoleComponent.cs): Monolith#4816 added the level without a way to hand it out
 - [`Content.Shared/Blocking/BlockingSystem.User.cs`](../../Content.Shared/Blocking/BlockingSystem.User.cs)
   - throttles the shield refusal popup
   - only a gun the user carries is refused, not an innate ability or a mounted weapon
@@ -338,10 +347,13 @@ Standalone edits outside `_WF` that serve no module: files with an untagged `WOL
   - whatever the piece replaced goes back on, instead of staying shut inside the piece
   - a suit deleted along with its wearer can't take the piece back
   - another suit's piece goes back to its suit, and what it covered is kept under this one
+- [`Content.Shared/Construction/Steps/ArbitraryInsertConstructionGraphStep.cs`](../../Content.Shared/Construction/Steps/ArbitraryInsertConstructionGraphStep.cs): step names may be loc keys or plain text
 - [`Content.Shared/Damage/Systems/DamageableSystem.cs`](../../Content.Shared/Damage/Systems/DamageableSystem.cs): restore the licence header removed by Kill Spdx
 - [`Content.Shared/DisplacementMap/DisplacementData.cs`](../../Content.Shared/DisplacementMap/DisplacementData.cs): wizden#38042, the stencil one draws nothing in UI sprite views
 - [`Content.Shared/DoAfter/SharedDoAfterSystem.Update.cs`](../../Content.Shared/DoAfter/SharedDoAfterSystem.Update.cs)
   - drifting doesn't interrupt work on yourself
+  - a finishing do-after can start one on another entity, which added to the query mid-loop and threw
+  - the do-afters to update this tick, taken before any runs
   - drifting isn't moving, so it doesn't interrupt work on yourself or something you carry
   - skipped while drifting
 - [`Content.Shared/Gibbing/Systems/GibbingSystem.cs`](../../Content.Shared/Gibbing/Systems/GibbingSystem.cs)
@@ -351,6 +363,7 @@ Standalone edits outside `_WF` that serve no module: files with an untagged `WOL
 - [`Content.Shared/Lightning/Components/SharedLightningComponent.cs`](../../Content.Shared/Lightning/Components/SharedLightningComponent.cs): restore the licence header removed by Kill Spdx
 - [`Content.Shared/MachineLinking/SharedSignalTimerComponent.cs`](../../Content.Shared/MachineLinking/SharedSignalTimerComponent.cs): restore the licence header removed by Kill Spdx
 - [`Content.Shared/Maps/ContentTileDefinition.cs`](../../Content.Shared/Maps/ContentTileDefinition.cs): Monolith#4804 made this true, which draws weather inside ships and buildings
+- [`Content.Shared/NightVision/SharedNightVisionSystem.cs`](../../Content.Shared/NightVision/SharedNightVisionSystem.cs): clear the wearer's overlay when a removal takes the component away
 - [`Content.Shared/Pinpointer/SharedNavMapSystem.cs`](../../Content.Shared/Pinpointer/SharedNavMapSystem.cs): compare region seeds by content; the reference compare dirtied every nav map each second
 - [`Content.Shared/Polymorph/Systems/SharedChameleonProjectorSystem.cs`](../../Content.Shared/Polymorph/Systems/SharedChameleonProjectorSystem.cs)
   - unanchoring left the mob a Dynamic body
@@ -385,6 +398,9 @@ Standalone edits outside `_WF` that serve no module: files with an untagged `WOL
 - [`Content.Shared/Weapons/Melee/Events/MeleeHitEvent.cs`](../../Content.Shared/Weapons/Melee/Events/MeleeHitEvent.cs): support hit damage that bypasses melee modifier sets
 - [`Content.Shared/Weapons/Melee/SharedMeleeWeaponSystem.cs`](../../Content.Shared/Weapons/Melee/SharedMeleeWeaponSystem.cs): apply configured damage after melee modifier sets
 - [`Content.Shared/Weapons/Ranged/Events/RequestShootEvent.cs`](../../Content.Shared/Weapons/Ranged/Events/RequestShootEvent.cs): restore the licence header removed by Kill Spdx
+- [`Content.Shared/Weapons/Ranged/Systems/BatteryWeaponFireModesSystem.cs`](../../Content.Shared/Weapons/Ranged/Systems/BatteryWeaponFireModesSystem.cs)
+  - wielding goes first and doesn't also switch the mode
+  - a use that wielded the gun isn't a mode switch
 - [`Content.Shared/Weapons/Ranged/Systems/SharedGunSystem.Revolver.cs`](../../Content.Shared/Weapons/Ranged/Systems/SharedGunSystem.Revolver.cs): C# % keeps the sign, index 0 gave -1 and crashed the server
 - [`LEGAL.md`](../../LEGAL.md)
   - licence files live in LICENSES/
@@ -439,8 +455,6 @@ Standalone edits outside `_WF` that serve no module: files with an untagged `WOL
 - [`Resources/Prototypes/_DV/Catalog/Jukebox/Standard.yml`](../../Resources/Prototypes/_DV/Catalog/Jukebox/Standard.yml): licence does not cover this fork, track removed
 - [`Resources/Prototypes/_DV/Entities/Objects/Weapons/Guns/Projectiles/muzzleflashes.yml`](../../Resources/Prototypes/_DV/Entities/Objects/Weapons/Guns/Projectiles/muzzleflashes.yml): restore the licence header removed by Kill Spdx
 - [`Resources/Prototypes/_Goobstation/Entities/Clothing/Eyes/glasses.yml`](../../Resources/Prototypes/_Goobstation/Entities/Clothing/Eyes/glasses.yml): an invalid default leaves the chameleon menu empty
-- [`Resources/Prototypes/_Goobstation/Entities/Clothing/Head/modsuit.yml`](../../Resources/Prototypes/_Goobstation/Entities/Clothing/Head/modsuit.yml): unsealing strips only the seal's own components, not the ones this helmet always has
-- [`Resources/Prototypes/_Goobstation/Entities/Clothing/OuterClothing/modsuit.yml`](../../Resources/Prototypes/_Goobstation/Entities/Clothing/OuterClothing/modsuit.yml): the rsi has no sealed vox state, so sealed Vox drew an error sprite
 - [`Resources/Prototypes/_Goobstation/Entities/Objects/Devices/Circuitboards/machine.yml`](../../Resources/Prototypes/_Goobstation/Entities/Objects/Devices/Circuitboards/machine.yml)
   - restore the licence header removed by Kill Spdx
   - a machine part under stackRequirements can't be inserted; the frame reads parts from requirements
@@ -462,15 +476,15 @@ Standalone edits outside `_WF` that serve no module: files with an untagged `WOL
 - [`Resources/Prototypes/_Mono/Catalogs/Fills/Crates/materials.yml`](../../Resources/Prototypes/_Mono/Catalogs/Fills/Crates/materials.yml): copper and lithium as listed, not uranium and plasma
 - [`Resources/Prototypes/_Mono/Catalogs/pdv_uplink_catalog.yml`](../../Resources/Prototypes/_Mono/Catalogs/pdv_uplink_catalog.yml)
   - the uplink sells the Vympel but had no 5.56 for it; priced like the 6.35 magazine and big 7.62 box
-  - PDV pack, 650->500 (+50 tax over mat cost)
-  - PDV pack, 1250->1000 (+100 tax over mat cost)
-- [`Resources/Prototypes/_Mono/Catalogs/tsfmc_uplink_catalog.yml`](../../Resources/Prototypes/_Mono/Catalogs/tsfmc_uplink_catalog.yml): PDV pack, price 125->175
+  - TSF Balance Pass; +100 tax from mat cost since no research cost
+  - TSF Balance Pass; +150 tax from mat cost since no research cost
+- [`Resources/Prototypes/_Mono/Catalogs/tsfmc_uplink_catalog.yml`](../../Resources/Prototypes/_Mono/Catalogs/tsfmc_uplink_catalog.yml): TSF Balance Pass; from 175 -> 130
 - [`Resources/Prototypes/_Mono/Catalogs/VendingMachines/Inventories/ussp.yml`](../../Resources/Prototypes/_Mono/Catalogs/VendingMachines/Inventories/ussp.yml): the loaded magazine is class-3 contraband worth 10 FMC since Monolith#4816
 - [`Resources/Prototypes/_Mono/Claws/reptilian.yml`](../../Resources/Prototypes/_Mono/Claws/reptilian.yml): huge claws never stop a lizard shooting; they take the worst spread instead
-- [`Resources/Prototypes/_Mono/Entities/Clothing/OuterClothing/modsuit.yml`](../../Resources/Prototypes/_Mono/Entities/Clothing/OuterClothing/modsuit.yml): the rsi has no resomi state, so sealed Resomi drew an error sprite
 - [`Resources/Prototypes/_Mono/Entities/Mobs/NPCs/mothroaches.yml`](../../Resources/Prototypes/_Mono/Entities/Mobs/NPCs/mothroaches.yml): OwO accent removed
 - [`Resources/Prototypes/_Mono/Entities/Objects/Devices/Circuitboards/Machine/turrets.yml`](../../Resources/Prototypes/_Mono/Entities/Objects/Devices/Circuitboards/Machine/turrets.yml): restore the licence header removed by Kill Spdx
 - [`Resources/Prototypes/_Mono/Entities/Objects/Devices/flatpack.yml`](../../Resources/Prototypes/_Mono/Entities/Objects/Devices/flatpack.yml): restore the licence header removed by Kill Spdx
+- [`Resources/Prototypes/_Mono/Entities/Objects/Devices/ship_vouchers.yml`](../../Resources/Prototypes/_Mono/Entities/Objects/Devices/ship_vouchers.yml): TSF Balance Pack, giving the TSF its renewable vouchers back
 - [`Resources/Prototypes/_Mono/Entities/Objects/Economy/components.yml`](../../Resources/Prototypes/_Mono/Entities/Objects/Economy/components.yml): Monolith#4805 commented the price out with the flash, leaving 300 for a good made from 1800
 - [`Resources/Prototypes/_Mono/Entities/Objects/Electronics/mech.yml`](../../Resources/Prototypes/_Mono/Entities/Objects/Electronics/mech.yml): restore the licence header removed by Kill Spdx
 - [`Resources/Prototypes/_Mono/Entities/Objects/Specific/Mechs/mech_construction.yml`](../../Resources/Prototypes/_Mono/Entities/Objects/Specific/Mechs/mech_construction.yml): restore the licence header removed by Kill Spdx
@@ -502,12 +516,6 @@ Standalone edits outside `_WF` that serve no module: files with an untagged `WOL
 - [`Resources/Prototypes/_Mono/Language/underground.yml`](../../Resources/Prototypes/_Mono/Language/underground.yml): codespeak gets its own chat colour so speakers can tell it from Common
 - [`Resources/Prototypes/_Mono/Loadouts/MedicalDispatch/universal_groups.yml`](../../Resources/Prototypes/_Mono/Loadouts/MedicalDispatch/universal_groups.yml): the ER PDAs, was MedicalDoctorPDA and ContractorSeniorPhysicianPDA, whose ID resets to medical doctor access
 - [`Resources/Prototypes/_Mono/Loadouts/PDV/role_loadouts_rogue.yml`](../../Resources/Prototypes/_Mono/Loadouts/PDV/role_loadouts_rogue.yml): PDV roles had no PDA cartridges
-- [`Resources/Prototypes/_Mono/Outpost/caelestinus.yml`](../../Resources/Prototypes/_Mono/Outpost/caelestinus.yml)
-  - trade crate destinations must be on the station entity, not the grid
-  - moved from gridComponents so crates sold here count as delivered
-- [`Resources/Prototypes/_Mono/PointsOfInterest/Dungeon/zvezda.yml`](../../Resources/Prototypes/_Mono/PointsOfInterest/Dungeon/zvezda.yml)
-  - trade crate destinations must be on the station entity, not the grid
-  - moved from gridComponents so crates sold here count as delivered
 - [`Resources/Prototypes/_Mono/PointsOfInterest/tsfmcindustry.yml`](../../Resources/Prototypes/_Mono/PointsOfInterest/tsfmcindustry.yml): its cargo request computer needs an order database or it opens blank
 - [`Resources/Prototypes/_Mono/Recipes/Construction/Graphs/Mechs/broadsword_construction.yml`](../../Resources/Prototypes/_Mono/Recipes/Construction/Graphs/Mechs/broadsword_construction.yml): restore the licence header removed by Kill Spdx
 - [`Resources/Prototypes/_Mono/Recipes/Construction/Graphs/Mechs/flail_construction.yml`](../../Resources/Prototypes/_Mono/Recipes/Construction/Graphs/Mechs/flail_construction.yml): restore the licence header removed by Kill Spdx
@@ -516,6 +524,7 @@ Standalone edits outside `_WF` that serve no module: files with an untagged `WOL
 - [`Resources/Prototypes/_Mono/Recipes/Construction/Graphs/Mechs/spyglass_construction.yml`](../../Resources/Prototypes/_Mono/Recipes/Construction/Graphs/Mechs/spyglass_construction.yml): restore the licence header removed by Kill Spdx
 - [`Resources/Prototypes/_Mono/Recipes/Construction/tools.yml`](../../Resources/Prototypes/_Mono/Recipes/Construction/tools.yml): restore the licence header removed by Kill Spdx
 - [`Resources/Prototypes/_Mono/Recipes/Lathes/Factions/shipyard.yml`](../../Resources/Prototypes/_Mono/Recipes/Lathes/Factions/shipyard.yml)
+  - TSF Balance Pack; lowering the cost in copper/lithium a smidge to reduce the tedium (by a smidge)
   - PDV pack, composite cost 12000->9000
   - PDV pack, composite cost 23000->18000
 - [`Resources/Prototypes/_Mono/Recipes/Lathes/Packs/Factions/phaethon_dynasty.yml`](../../Resources/Prototypes/_Mono/Recipes/Lathes/Packs/Factions/phaethon_dynasty.yml): its tech disk promised it, but the lathes never listed it
@@ -532,7 +541,10 @@ Standalone edits outside `_WF` that serve no module: files with an untagged `WOL
 - [`Resources/Prototypes/_NF/Entities/Objects/Consumable/Food/meals.yml`](../../Resources/Prototypes/_NF/Entities/Objects/Consumable/Food/meals.yml): OwO accent removed
 - [`Resources/Prototypes/_NF/Entities/Objects/Weapons/Guns/Ammunition/Projectiles/misc.yml`](../../Resources/Prototypes/_NF/Entities/Objects/Weapons/Guns/Ammunition/Projectiles/misc.yml): a flare that lands inside a wall still lights the room
 - [`Resources/Prototypes/_NF/Entities/Objects/Weapons/Guns/expedition_guns.yml`](../../Resources/Prototypes/_NF/Entities/Objects/Weapons/Guns/expedition_guns.yml): was WeaponSubMachineGunTypewriter, class-3 contraband since Monolith#4816
-- [`Resources/Prototypes/_NF/Entities/Structures/Machines/Computers/computers_tabletop.yml`](../../Resources/Prototypes/_NF/Entities/Structures/Machines/Computers/computers_tabletop.yml): Medical Dispatch staff are Colonial since Monolith#4807
+- [`Resources/Prototypes/_NF/Entities/Structures/atm.yml`](../../Resources/Prototypes/_NF/Entities/Structures/atm.yml): the access refactor took the payroll console from Fireteam Leaders
+- [`Resources/Prototypes/_NF/Entities/Structures/Machines/Computers/computers_tabletop.yml`](../../Resources/Prototypes/_NF/Entities/Structures/Machines/Computers/computers_tabletop.yml)
+  - the access refactor took the payroll console from Fireteam Leaders
+  - Medical Dispatch staff are Colonial since Monolith#4807
 - [`Resources/Prototypes/_NF/Events/events.yml`](../../Resources/Prototypes/_NF/Events/events.yml)
   - gas leak event disabled
   - vent clog event disabled
@@ -546,6 +558,7 @@ Standalone edits outside `_WF` that serve no module: files with an untagged `WOL
 - [`Resources/Prototypes/_Obelisk/Species/hydrakin.yml`](../../Resources/Prototypes/_Obelisk/Species/hydrakin.yml): hydrakin is not selectable in character creation
 - [`Resources/Prototypes/_Shitmed/Entities/Objects/Devices/Circuitboards/Machine/production.yml`](../../Resources/Prototypes/_Shitmed/Entities/Objects/Devices/Circuitboards/Machine/production.yml): a machine part under stackRequirements can't be inserted; the frame reads parts from requirements
 - [`Resources/Prototypes/_StarLight/Entities/Mobs/Species/felionoid.yml`](../../Resources/Prototypes/_StarLight/Entities/Mobs/Species/felionoid.yml): OwO accent removed
+- [`Resources/Prototypes/Catalog/Fills/Crates/engines.yml`](../../Resources/Prototypes/Catalog/Fills/Crates/engines.yml): the IRE rebrand missed this crate
 - [`Resources/Prototypes/Catalog/VendingMachines/Inventories/engivend.yml`](../../Resources/Prototypes/Catalog/VendingMachines/Inventories/engivend.yml): radiation suits buyable from the EngiVend
 - [`Resources/Prototypes/Damage/modifier_sets.yml`](../../Resources/Prototypes/Damage/modifier_sets.yml): restore the licence header removed by Kill Spdx
 - [`Resources/Prototypes/Entities/Clothing/Back/specific.yml`](../../Resources/Prototypes/Entities/Clothing/Back/specific.yml): Frontier hid ClothingBackpack, so it was never a valid chameleon pick and the menu got no state
@@ -561,7 +574,6 @@ Standalone edits outside `_WF` that serve no module: files with an untagged `WOL
 - [`Resources/Prototypes/Entities/Objects/Consumable/Food/Baked/cake.yml`](../../Resources/Prototypes/Entities/Objects/Consumable/Food/Baked/cake.yml): OwO accent removed
 - [`Resources/Prototypes/Entities/Objects/Devices/pda.yml`](../../Resources/Prototypes/Entities/Objects/Devices/pda.yml): E and Z open the PDA instead of searching for a player to control it
 - [`Resources/Prototypes/Entities/Objects/Misc/identification_cards.yml`](../../Resources/Prototypes/Entities/Objects/Misc/identification_cards.yml): the universal card opens the Underground Black Market too
-- [`Resources/Prototypes/Entities/Objects/Tools/access_configurator.yml`](../../Resources/Prototypes/Entities/Objects/Tools/access_configurator.yml): Monolith#4816 added the level without a way to hand it out
 - [`Resources/Prototypes/Entities/Objects/Weapons/Guns/Turrets/turrets_ballistic.yml`](../../Resources/Prototypes/Entities/Objects/Weapons/Guns/Turrets/turrets_ballistic.yml)
   - parented to BaseWeaponTurret instead of BaseWeaponBallisticTurret so it has one ammo provider.
   - ammo container copied from BaseWeaponBallisticTurret.
@@ -692,6 +704,7 @@ Standalone edits outside `_WF` that serve no module: files with an untagged `WOL
 - [`Resources/Textures/_NF/Clothing/Head/Hats/stc_cap.rsi/equipped-HELMET-vulpkanin.png`](../../Resources/Textures/_NF/Clothing/Head/Hats/stc_cap.rsi/equipped-HELMET-vulpkanin.png): The vulpkanin state was a winter coat hood; it now draws the cap itself.
 - [`Resources/Textures/_NF/Effects/mobspawn.rsi/`](../../Resources/Textures/_NF/Effects/mobspawn.rsi/): Licence corrected to CC-BY-NC-SA-3.0, as the sprite is taken from Goonstation, whose assets are BY-NC-SA.
 - [`Resources/Textures/_NF/Structures/Machines/scrap_processor.rsi/`](../../Resources/Textures/_NF/Structures/Machines/scrap_processor.rsi/): Licence corrected to CC-BY-NC-SA-3.0, as the sprite is taken from Goonstation, whose assets are BY-NC-SA.
+- [`Resources/Textures/Mobs/Animals/mothroach/displacement.rsi/`](../../Resources/Textures/Mobs/Animals/mothroach/displacement.rsi/): Displacement pixels whose source falls outside the frame are transparent, so worn items stop sampling neighbouring atlas art.
 - [`Resources/Textures/Objects/Fun/rubber_hammer.rsi/`](../../Resources/Textures/Objects/Fun/rubber_hammer.rsi/): Licence corrected to CC-BY-NC-SA-3.0, as the sprite is taken from Goonstation, whose assets are BY-NC-SA.
 - [`Resources/Textures/Objects/Misc/chopstick.rsi/`](../../Resources/Textures/Objects/Misc/chopstick.rsi/): Licence corrected to CC-BY-NC-SA-3.0, as the sprite is taken from Goonstation, whose assets are BY-NC-SA.
 - [`Resources/Textures/Structures/Power/cell_recharger.rsi/`](../../Resources/Textures/Structures/Power/cell_recharger.rsi/): Licence corrected to CC-BY-NC-SA-3.0, as the sprite is taken from Goonstation, whose assets are BY-NC-SA.

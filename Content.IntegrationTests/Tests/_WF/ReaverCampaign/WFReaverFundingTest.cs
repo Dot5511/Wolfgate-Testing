@@ -14,7 +14,7 @@ using Robust.Shared.GameObjects;
 
 namespace Content.IntegrationTests.Tests._WF.ReaverCampaign;
 
-/// <summary>Smuggling crates and fenced freight fund the Reavers: a full war chest brings reinforcements and spread forward.</summary>
+/// <summary>Smuggling crates and fenced freight fund the Reavers: each payout from the war chest brings reinforcements and spread forward and sends a patrol.</summary>
 [TestOf(typeof(WFReaverCampaignSystem))]
 public sealed class WFReaverFundingTest : WFReaverTestBase
 {
@@ -22,8 +22,9 @@ public sealed class WFReaverFundingTest : WFReaverTestBase
     private const string Funded = "Smuggling money is reaching the Ashfall Reavers";
 
     /// <summary>
-    /// Crates bank toward a payout, capped at one, while no stronghold stands; the payout lands once one does. Ordinary
-    /// goods don't count, and each payout cuts the clocks by the campaign's share and is announced on the radio.
+    /// Crates bank toward payouts, up to the chest's size, while no stronghold stands; one payout lands once one does and
+    /// the rest wait out the cooldown. Ordinary goods don't count, and each payout cuts the clocks by the campaign's share,
+    /// sends a patrol and is announced on the radio.
     /// </summary>
     [Test]
     public async Task SmugglingSalesFundTheReavers()
@@ -51,12 +52,14 @@ public sealed class WFReaverFundingTest : WFReaverTestBase
             market.Sell(chute, TradeTestWorld.Hauled(SEntMan, far, MapData.GridCoords), seller);
             Assert.That(reavers.State()?.Funding ?? 0, Is.Zero, "An ordinary good funded the Reavers.");
 
-            for (var i = 0; i <= campaign.FundingCrates; i++)
+            var chest = WFReaverCampaignSystem.FundingChest(campaign);
+            Assert.That(chest, Is.GreaterThan(campaign.FundingCrates), "The test needs a chest that banks more than one payout.");
+            for (var i = 0; i <= chest; i++)
             {
                 market.Sell(chute, TradeTestWorld.Hauled(SEntMan, far, MapData.GridCoords, Contraband), seller);
             }
 
-            Assert.That(State().Funding, Is.EqualTo(campaign.FundingCrates), "The war chest should bank one payout at most.");
+            Assert.That(State().Funding, Is.EqualTo(chest), "The war chest should bank no more than its size.");
             Assert.That(State().Funded, Is.Zero, "Nothing should be paid out with no stronghold to spend it.");
 
             stronghold = FoundAt(Home);
@@ -72,23 +75,25 @@ public sealed class WFReaverFundingTest : WFReaverTestBase
             var reavers = Server.System<WFReaverCampaignSystem>();
             var market = Server.System<WFTradeMarketSystem>();
             var campaign = reavers.Campaign!;
+            var chest = WFReaverCampaignSystem.FundingChest(campaign);
             var reinforcementCut = campaign.ReinforcementInterval * reavers.Bracket(campaign, State()).ReinforcementScale * campaign.FundingShare;
             var spreadCut = campaign.SpreadInterval * campaign.FundingShare;
 
-            Assert.That(State().Funded, Is.EqualTo(1), "The banked payout should land once a stronghold stands.");
-            Assert.That(State().Funding, Is.Zero);
+            Assert.That(State().Funded, Is.EqualTo(1), "One banked payout should land once a stronghold stands.");
+            Assert.That(State().Funding, Is.EqualTo(chest - campaign.FundingCrates), "A payout should leave the rest of the chest banked.");
             var comp = SEntMan.GetComponent<WFReaverStrongholdComponent>(stronghold);
             Assert.That((reinforcement - comp.NextReinforcement).TotalSeconds, Is.EqualTo(reinforcementCut.TotalSeconds).Within(1));
             Assert.That((spread - State().NextSpread!.Value).TotalSeconds, Is.EqualTo(spreadCut.TotalSeconds).Within(1));
+            Assert.That(reavers.Patrols().Any(patrol => patrol.Comp1.Stronghold == stronghold), Is.True, "A payout should send a patrol.");
 
-            // A chest filled during the cooldown waits.
+            // What is still banked, and crates sold meanwhile, wait out the cooldown.
             for (var i = 0; i < campaign.FundingCrates; i++)
             {
                 market.Sell(chute, TradeTestWorld.Hauled(SEntMan, far, MapData.GridCoords, Contraband), seller);
             }
 
             Assert.That(State().Funded, Is.EqualTo(1), "A payout landed inside the cooldown.");
-            Assert.That(State().Funding, Is.EqualTo(campaign.FundingCrates));
+            Assert.That(State().Funding, Is.EqualTo(chest));
             Assert.That((State().NextFunding - STiming.CurTime).TotalMinutes, Is.EqualTo(campaign.FundingCooldown.TotalMinutes).Within(0.5),
                 "The payout should start the campaign's cooldown.");
 
@@ -102,12 +107,12 @@ public sealed class WFReaverFundingTest : WFReaverTestBase
         {
             var campaign = Server.System<WFReaverCampaignSystem>().Campaign!;
             Assert.That(State().Funded, Is.EqualTo(2));
-            Assert.That(State().Funding, Is.Zero);
+            Assert.That(State().Funding, Is.EqualTo(WFReaverCampaignSystem.FundingChest(campaign) - campaign.FundingCrates));
             Assert.That((State().NextFunding - STiming.CurTime).TotalMinutes, Is.EqualTo(campaign.FundingCooldown.TotalMinutes).Within(0.5));
         });
 
         await RunTicks(30);
-        Assert.That(ChatSince(since).Any(line => line.Contains(Funded)), Is.False, "A payout is not announced.");
+        Assert.That(ChatSince(since).Any(line => line.Contains(Funded)), Is.True, "A payout should be announced on the radio.");
     }
 
     /// <summary>Narcotics sold on a cargo pallet bank a crate for every share of their value; other goods bank nothing.</summary>
@@ -132,12 +137,15 @@ public sealed class WFReaverFundingTest : WFReaverTestBase
             Assert.That(State().Funding, Is.Zero);
             Assert.That(State().FundingGoods, Is.Zero, "An ordinary good funded the Reavers.");
 
+            // A baggie may be worth more than a crate's share; the rest of its value waits toward the next one.
             var baggie = SEntMan.SpawnEntity("WFBaggieCocaine", MapData.GridCoords);
             var price = pricing.GetPrice(baggie);
-            Assert.That(price, Is.GreaterThan(0).And.LessThan(campaign.FundingGoodsValue));
+            Assert.That(price, Is.GreaterThan(0));
+            var crates = (int) (price / campaign.FundingGoodsValue);
             Sell(baggie);
-            Assert.That(State().Funding, Is.Zero);
-            Assert.That(State().FundingGoods, Is.EqualTo(price).Within(0.01), "A small sale waits toward the next crate.");
+            Assert.That(State().Funding, Is.EqualTo(crates));
+            Assert.That(State().FundingGoods, Is.EqualTo(price - crates * campaign.FundingGoodsValue).Within(0.01),
+                "What is left of a sale waits toward the next crate.");
 
             var more = (int) (campaign.FundingGoodsValue / price) + 1;
             var goods = new EntityUid[more];
